@@ -1,3 +1,3 @@
 # ansible-config-mgt
 
-This is still an ongoing project
+This is still an ongoing task
