@@ -1,0 +1,42 @@
+---
+- name: update web, nfs and db servers
+  hosts: webservers, nfs, db
+  become: yes
+  tasks:
+    - name: ensure wireshark is at the latest version
+      yum:
+        name: wireshark
+        state: latest
+
+- name: update LB server
+  hosts: lb
+  become: yes
+  tasks:
+    - name: Update apt repo
+      apt: 
+        update_cache: yes
+
+    - name: ensure wireshark is at the latest version
+      apt:
+        name: wireshark
+        state: latest
+
+- name: additional tasks for all servers
+  hosts: all
+  become: yes
+  tasks:
+    - name: Create a directory
+      file:
+        path: /tmp/mydirectory
+        state: directory
+
+    - name: Create a file in the new directory
+      file:
+        path: /tmp/mydirectory/myfile.txt
+        state: touch
+
+    - name: Change timezone to UTC
+      command: timedatectl set-timezone UTC
+
+    - name: Run a shell script
+      shell: /path/to/your/script.sh
