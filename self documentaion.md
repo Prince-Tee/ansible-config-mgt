@@ -352,5 +352,135 @@ Copy code
     - name: Run a shell script
       shell: /path/to/your/script.sh
 
+Update GitHub with Your Code Changes
+Check Status of Git Changes:
+
+Run git status to see the modified files in your repository.
+Add Files to Git:
+
+Add only the specific files you’ve modified or created (such as common.yml).
+bash
+Copy code
+git add playbooks/common.yml
+Commit the Changes with a Descriptive Message:
+
+bash
+Copy code
+git commit -m "Add common.yml playbook for server updates and configurations"
+Push the Branch to GitHub:
+
+If you’re on a feature branch, push your branch to GitHub.
+bash
+Copy code
+git push origin feature/setup-inventory-playbooks
+
+(screenshot)
+
+Step 3: Create a Pull Request (PR) on GitHub
+Go to Your GitHub Repository:
+
+Navigate to your repository page on GitHub, and you should see a prompt to create a Pull Request for your recent push.
+Create a Pull Request:
+
+Click on “Compare & pull request.”
+Add a descriptive title and comment about the changes.
+Review the changes to ensure they’re accurate, then click Create pull request.
+Review the Code as a Different Developer:
+
+Imagine you’re a team member reviewing someone else’s code.
+Check for any issues, and leave a comment if necessary.
+Merge the Pull Request:
+
+(screenshot)
+
+If everything looks good, click Merge pull request and confirm.
+Pull the Latest Changes to Your Local Master Branch:
+
+Switch to the master branch.
+bash
+Copy code
+git checkout master
+Pull the latest changes from GitHub.
+bash
+Copy code
+git pull origin master
+
+(screenshot)
+
+Step 4: Verify Jenkins Automation (if integrated with Jenkins)
+Jenkins Build Trigger:
+
+If you’ve set up Jenkins to trigger a job on code changes, Jenkins will automatically start a build once your code is merged into the master branch.
+
+(screenshot)
+
+Confirm Build Artifacts on Jenkins:
+
+Log into Jenkins and navigate to your project.
+Once the job runs, confirm the build output is saved in the /var/lib/jenkins/jobs/ansible/builds/<build_number>/archive/ directory.
+
+(screenshot)
+
+Connect to Your Ansible-Controlled Server from VSCode
+Open VSCode:
+
+Start VSCode on your local machine.
+Connect to Your Remote Instance:
+
+In VSCode, use the Remote - SSH extension to connect to your server instance.
+Press F1, type Remote-SSH: Connect to Host..., and select the server you wish to connect which in our case is 51.21.47.126. after that you will get prompted to choose from either linux windows or macos. choose linux
+
+if you encounter an error pop up  saying "could not establish connection to "51.21.47.126 ": permission denied(publickey). " like I did you will need to update your ssh config file with th ssh key we used to set up the ssh remote connection. in my case I addedthe line IdentityFile "C:\Users\Prince-Tee\Downloads\lampproject.pem"
+find below the screenshot
+
+(Screenshot)
+
+After adding that line Press F1, type Remote-SSH: Connect to Host..., and select the server you wish to connect which in our case is 51.21.47.126. I saw that ssh was connecting. find below the screenshot from the output in vscode
+
+(screenshot)
+(screenshot)
+
+I checked terminal and so that the connection was succesfully
+
+(sreenshot)
+
+Prepare the Ansible Environment
+Navigate to Your Ansible Directory:
+
+Once connected to the server through VSCode, open the terminal in VSCode or on the remote server.
+Navigate to your Ansible configuration directory where your playbook and inventory files are located:
+bash
+Copy code
+cd ~/ansible-config-mgt
+Confirm Inventory and Playbook Locations:
+(screenshot)
+
+Check that the inventory/dev.ini and playbooks/common.yml files are present in this directory:
+bash
+Copy code
+ls inventory/dev.yml playbooks/common.yml
+(screesnhot)
+
+if they are not present run git pull origin main
+(screenshot)
+
+now run 
+
+ls inventory/dev.ini playbooks/common.yml
+
+then after that run 
+
+Run the playbook with the following command:
+bash
+Copy code
+ansible-playbook -i inventory/dev.ini playbooks/common.yml
 
 
+if you encounter permission issue,
+first go to your aws and make sure you Open the Inbound Rules of Each Server's Security Group:
+
+Go to the security group associated with each server (DB, LB, web servers, and NFS).
+Under the Inbound rules section, add a new rule for SSH.
+Specify the Ansible Server’s Private IP:
+
+For the Source field, set it to the private IP of your Ansible server, not a wide range like 0.0.0.0/0. This restricts SSH access to only the Ansible server, enhancing security. 
