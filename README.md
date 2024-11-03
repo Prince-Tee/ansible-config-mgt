@@ -1,3 +1,3 @@
 # ansible-config-mgt
 
-This is still an ongoing task with steghub
+This is still an ongoing task
