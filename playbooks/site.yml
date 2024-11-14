@@ -1,2 +1,5 @@
 ---
- import_playbook: ../static-assignments/common.yml
+- name: Import common playbook
+  hosts: all
+  tasks:
+    - import_playbook: ../static-assignments/common.yml
