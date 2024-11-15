@@ -5,11 +5,21 @@
   become: yes
   become_user: root
   tasks:
+    - name: Verify Wireshark is installed before removing (CentOS/RHEL)
+      yum:
+        name: wireshark
+        state: present
+      register: wireshark_installed
+      when: ansible_facts['pkg_mgr'] == "yum"
+      ignore_errors: yes
+
     - name: Delete Wireshark on RHEL/CentOS servers
       yum:
         name: wireshark
         state: removed
-      when: ansible_facts['pkg_mgr'] == "yum"
+      when:
+        - ansible_facts['pkg_mgr'] == "yum"
+        - wireshark_installed is defined and wireshark_installed is succeeded
 
 - name: Remove Wireshark from LB server
   hosts: lb

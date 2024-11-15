@@ -1,35 +1,25 @@
----
-- name: Remove Wireshark from web, nfs, and db servers
+ ---
+- name: update web, nfs, and db servers
   hosts: webservers, nfs, db
-  remote_user: ec2-user
   become: yes
-  become_user: root
   tasks:
-    - name: Verify Wireshark is installed before removing (CentOS/RHEL)
+    - name: ensure wireshark is at the latest version on RHEL/CentOS servers
       yum:
         name: wireshark
-        state: present
-      register: wireshark_installed
+        state: latest
       when: ansible_facts['pkg_mgr'] == "yum"
-      ignore_errors: yes
 
-    - name: Delete Wireshark on RHEL/CentOS servers
-      yum:
-        name: wireshark
-        state: removed
-      when:
-        - ansible_facts['pkg_mgr'] == "yum"
-        - wireshark_installed is defined and wireshark_installed is succeeded
-
-- name: Remove Wireshark from LB server
+- name: update LB server
   hosts: lb
-  remote_user: ubuntu
   become: yes
-  become_user: root
   tasks:
-    - name: Delete Wireshark on Ubuntu/Debian servers
+    - name: Update apt repository
+      apt: 
+        update_cache: yes
+      when: ansible_facts['pkg_mgr'] == "apt"
+
+    - name: ensure wireshark is at the latest version on Ubuntu/Debian servers
       apt:
         name: wireshark
-        state: absent
-        purge: yes
+        state: latest
       when: ansible_facts['pkg_mgr'] == "apt"
