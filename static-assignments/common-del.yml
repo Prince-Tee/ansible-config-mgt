@@ -10,7 +10,7 @@
         name: wireshark
         state: present
       register: wireshark_installed
-      when: ansible_facts['pkg_mgr'] == "yum"
+      when: ansible_facts['pkg_mgr'] in ["yum", "dnf"]
       ignore_errors: yes
 
     - name: Delete Wireshark on RHEL/CentOS servers
@@ -18,7 +18,7 @@
         name: wireshark
         state: removed
       when:
-        - ansible_facts['pkg_mgr'] == "yum"
+        - ansible_facts['pkg_mgr'] in ["yum", "dnf"]
         - wireshark_installed is defined and wireshark_installed is succeeded
 
 - name: Remove Wireshark from LB server
