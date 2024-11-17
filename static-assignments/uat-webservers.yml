@@ -1,4 +1,5 @@
 ---
-- hosts: uat-webservers
+- name: Configure UAT Webservers
+  hosts: uat-webservers
   roles:
     - webserver
