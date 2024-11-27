@@ -1,10 +1,8 @@
 ---
-- hosts: uat-webservers
-- import_playbook: ../static-assignments/uat-webservers.yml
-
-# Import the load balancers playbook with a condition
 - name: Loadbalancers assignment
   hosts: lb
-  vars:
-    load_balancer_is_required: true
-  import_playbook: ../static-assignments/loadbalancers.yml
+  tasks:
+    - import_playbook: ../static-assignments/loadbalancers.yml
+      when: load_balancer_is_required
+
+
