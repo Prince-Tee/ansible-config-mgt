@@ -1,6 +1,7 @@
 ---
+- hosts: uat-webservers
+- import_playbook: ../static-assignments/uat-webservers.yml
+
 - hosts: lb
 - import_playbook: ../static-assignments/loadbalancers.yml
 
-#- hosts: uat-webservers
-#- import_playbook: ../static-assignments/uat-webservers.yml
