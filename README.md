@@ -1,3 +1,3 @@
 # ansible-config-mgt
 
-This is still an ongoing task for the refactoring in steghub
+This is still an ongoing task for the refactoring in steghub program
