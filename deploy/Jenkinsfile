@@ -1,42 +1,42 @@
-pipeline {
+    pipeline {
     agent any
 
   stages {
-    stage('Build') {
+     stage("Initial cleanup") {
       steps {
-        script {
-          sh 'echo "Building Stage"'
+        dir("${WORKSPACE}") {
+          deleteDir()
         }
       }
     }
 
-    stage('Test') {
+    stage('Checkout SCM') {
       steps {
-        script {
-          sh 'echo "Testing Stage"'
-        }
+        git branch: 'main', credentialsId: 'gashity_token', url: 'https://github.com/Prince-Tee/ansible-config-mgt.git'
       }
     }
-    stage('Package') {
-      steps {
-        script {
-          sh 'echo "Packaging Stage"'
+      stage('Test SSH Connection') {
+            steps {
+                sshagent(['private_key']) {  // 'ansible' is the ID of the credentials
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.47.62 exit'
+                }
+            }
         }
+   
+
+
+    stage('Run Ansible playbook') {
+      steps {
+       ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible-config-mgt', inventory: 'inventory/dev.ini', playbook: 'playbooks/site.yml', vaultTmpPath: ''
       }
     }
-    stage('Deploy') {
+      stage('Clean Workspace after build') {
       steps {
-        script {
-          sh 'echo "Deploying Stage"'
-        }
+        cleanWs(cleanWhenAborted: true, cleanWhenFailure: true, cleanWhenNotBuilt: true, cleanWhenUnstable: true, deleteDirs: true)
       }
     }
-    stage('Clean up') {
-      steps {
-        script {
-          sh 'echo "Cleaning up Stage"'
-        }
-      }
-    }            
+
+
     }
 }
+
