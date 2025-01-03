@@ -14,6 +14,8 @@
       steps {
         git branch: 'main', credentialsId: 'gashity_token', url: 'https://github.com/Prince-Tee/ansible-config-mgt.git'
       }
+    }
+    
     stage('Prepare Ansible For Execution') {
       steps {
         sh 'echo ${WORKSPACE}'
