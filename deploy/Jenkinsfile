@@ -31,12 +31,19 @@
     }
 }
 
-   
-
 
     stage('Run Ansible playbook') {
       steps {
-       ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible-config-mgt', inventory: 'inventory/dev.ini', playbook: 'playbooks/site.yml', vaultTmpPath: ''
+        sshagent(['Taiwo']) {
+          ansiblePlaybook(
+            become: true,
+            credentialsId: 'Taiwo',
+            disableHostKeyChecking: true,
+            installation: 'ansible',
+            inventory: "${WORKSPACE}/inventory/dev.ini",
+            playbook: "${WORKSPACE}/playbooks/site.yml"
+          )
+        }
       }
     }
       stage('Clean Workspace after build') {
