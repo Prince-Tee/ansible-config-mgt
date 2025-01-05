@@ -30,20 +30,7 @@
         }
     }
 }
-    stage('Run Ansible playbook') {
-    steps {
-        sshagent(['Taiwo']) {
-            ansiblePlaybook(
-                become: true,
-                credentialsId: 'Taiwo',
-                disableHostKeyChecking: true,
-                installation: 'ansible',
-                inventory: "${WORKSPACE}/inventory/dev.ini",
-                playbook: "${WORKSPACE}/playbooks/site.yml"
-            )
-        }
-    }
-}
+    
    
 
 
