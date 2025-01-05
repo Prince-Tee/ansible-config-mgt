@@ -26,24 +26,21 @@
    stage('Test SSH Connection') {
     steps {
         sshagent(['Taiwo']) {
-            sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.47.62 exit'
+            sh 'ssh -o StrictHostKeyChecking=no @172.31.47.62 exit'
         }
     }
 }
+    stage('Run Ansible playbook') {
+      steps {
+       ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible-config-mgt', inventory: 'inventory/dev.ini', playbook: 'playbooks/site.yml', vaultTmpPath: ''
+      }
+    }
+   
 
 
     stage('Run Ansible playbook') {
       steps {
-        sshagent(['Taiwo']) {
-          ansiblePlaybook(
-            become: true,
-            credentialsId: 'Taiwo',
-            disableHostKeyChecking: true,
-            installation: 'ansible',
-            inventory: "${WORKSPACE}/inventory/dev.ini",
-            playbook: "${WORKSPACE}/playbooks/site.yml"
-          )
-        }
+       ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible-config-mgt', inventory: 'inventory/dev.ini', playbook: 'playbooks/site.yml', vaultTmpPath: ''
       }
     }
       stage('Clean Workspace after build') {
