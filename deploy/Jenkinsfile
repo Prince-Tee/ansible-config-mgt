@@ -23,13 +23,14 @@
       }
     }
 
-    stage('Test SSH Connection') {
-      steps {
-        sshagent(['private-key']) {
-          sh 'ssh -o StrictHostKeyChecking=no -i /home/ubuntu/.ssh/ade.pem ec2-user@172.31.47.62 exit'
+   stage('Test SSH Connection') {
+    steps {
+        sshagent(['Taiwo']) {
+            sh 'ssh -o StrictHostKeyChecking=no ubuntu@172.31.47.62 exit'
         }
-      }
     }
+}
+
    
 
 
