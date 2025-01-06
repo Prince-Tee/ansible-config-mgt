@@ -3,6 +3,7 @@
 
     parameters {
       string(name: 'inventory', defaultValue: 'dev',  description: 'This is the inventory file for the environment to deploy configuration')
+      string(name: 'tags', defaultValue: '', description: 'Ansible tags to limit execution')
     }
 
   stages {
@@ -40,7 +41,7 @@
 
     stage('Run Ansible playbook') {
       steps {
-       ansiblePlaybook credentialsId: 'Taiwo', disableHostKeyChecking: true, installation: 'ansible-config-mgt', inventory: 'inventory/uat.ini', playbook: 'playbooks/uat-webservers.yml', vaultTmpPath: ''
+       ansiblePlaybook credentialsId: 'Taiwo', disableHostKeyChecking: true, installation: 'ansible-config-mgt', inventory: 'inventory/${inventory}.ini', playbook: 'playbooks/uat-webservers.yml', vaultTmpPath: ''
       }
     }
       stage('Clean Workspace after build') {
