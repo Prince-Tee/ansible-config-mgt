@@ -1,6 +1,10 @@
     pipeline {
     agent any
 
+    parameters {
+      string(name: 'inventory', defaultValue: 'dev',  description: 'This is the inventory file for the environment to deploy configuration')
+    }
+
   stages {
      stage("Initial cleanup") {
       steps {
@@ -36,7 +40,7 @@
 
     stage('Run Ansible playbook') {
       steps {
-       ansiblePlaybook credentialsId: 'Taiwo', disableHostKeyChecking: true, installation: 'ansible-config-mgt', inventory: 'inventory/dev.ini', playbook: 'playbooks/site.yml', vaultTmpPath: ''
+       ansiblePlaybook credentialsId: 'Taiwo', disableHostKeyChecking: true, installation: 'ansible-config-mgt', inventory: 'inventory/uat.ini', playbook: 'playbooks/uat-webservers.yml', vaultTmpPath: ''
       }
     }
       stage('Clean Workspace after build') {
