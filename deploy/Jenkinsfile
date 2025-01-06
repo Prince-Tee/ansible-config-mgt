@@ -36,7 +36,7 @@
 
     stage('Run Ansible playbook') {
       steps {
-       ansiblePlaybook credentialsId: 'Taiwo', disableHostKeyChecking: true, installation: 'ansible-config-mgt', inventory: 'inventory/uat.ini', playbook: 'playbooks/uat-webservers.yml', vaultTmpPath: ''
+       ansiblePlaybook credentialsId: 'Taiwo', disableHostKeyChecking: true, installation: 'ansible-config-mgt', inventory: 'inventory/dev.ini', playbook: 'playbooks/site.yml', vaultTmpPath: ''
       }
     }
       stage('Clean Workspace after build') {
